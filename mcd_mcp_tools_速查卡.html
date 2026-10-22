@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍔 麦当劳 MCP · 35 工具速查卡</title>
+<style>
+  :root{
+    --bg:#1a1230; --card:#2c2052; --card2:#34245f; --pink:#ff6fae; --purple:#b06cf0;
+    --cyan:#5be0d0; --amber:#ffcf66; --green:#5fe08a; --text:#f3ecff; --muted:#b8a9e0; --line:#42326f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;
+    background:linear-gradient(160deg,#160f2b,#1f1540 60%,#2a1850);color:var(--text);line-height:1.6;padding:20px 14px 40px}
+  .wrap{max-width:1100px;margin:0 auto}
+  header{text-align:center;margin-bottom:16px}
+  header h1{font-size:25px;font-weight:800;
+    background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  header .sub{color:var(--muted);font-size:12.5px;margin-top:5px}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0 18px}
+  .search{flex:1;min-width:200px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);
+    background:#241a44;color:var(--text);font-size:14px;outline:none}
+  .search:focus{border-color:var(--purple)}
+  .chip{padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:#241a44;
+    color:var(--muted);font-size:12.5px;cursor:pointer;user-select:none;transition:.15s}
+  .chip:hover{border-color:var(--purple);color:var(--text)}
+  .chip.on{background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff;border-color:transparent;font-weight:700}
+  .count{color:var(--muted);font-size:12px;margin-left:auto}
+  .mod{margin:18px 0;background:linear-gradient(150deg,var(--card),var(--card2));
+    border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+  .mod h2{font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .mod h2 .n{font-size:11px;background:rgba(176,108,240,.22);color:var(--purple);padding:2px 9px;border-radius:999px;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:11px}
+  .tool{background:#241a44;border:1px solid var(--line);border-radius:13px;padding:12px 13px}
+  .tool .name{font-family:ui-monospace,Consolas,monospace;font-size:13px;font-weight:700;color:var(--cyan);
+    display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .tag-t{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:700}
+  .tag-t.ok{background:rgba(95,224,138,.2);color:var(--green)}
+  .tag-t.real{background:rgba(91,224,208,.2);color:var(--cyan)}
+  .tool .desc{font-size:12px;color:var(--text);margin:7px 0 6px;line-height:1.55}
+  .tool .p{font-size:11.5px;color:var(--muted)}
+  .tool .p b{color:var(--amber)}
+  .tool .ex{font-size:11px;color:var(--muted);margin-top:6px;background:#1c1438;border-radius:8px;padding:6px 8px;
+    font-family:ui-monospace,monospace;word-break:break-all}
+  footer{margin-top:24px;text-align:center;font-size:11px;color:var(--muted);line-height:1.7}
+  footer a{color:var(--purple);text-decoration:none}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🍔 麦当劳 MCP · 35 工具速查卡</h1>
+    <div class="sub">WorkBuddy × 麦当劳「1024 造物挑战」· 数据来自真实 <code>tools/list</code> 调用（2026-10-22）· 单文件离线</div>
+  </header>
+
+  <div class="controls">
+    <input class="search" id="q" placeholder="🔍 搜索工具名 / 用途，如：券、计价、订单、积分…">
+    <span class="count" id="cnt">共 35 个</span>
+  </div>
+  <div class="controls" id="chips">
+    <span class="chip on" data-f="all">全部</span>
+    <span class="chip" data-f="A">🥗 营养菜单</span>
+    <span class="chip" data-f="B">🎟️ 优惠领券</span>
+    <span class="chip" data-f="C">💳 计价下单</span>
+    <span class="chip" data-f="D">🎡 积分抽奖</span>
+    <span class="chip" data-f="E">🛍️ 商城兑换</span>
+    <span class="chip" data-f="F">🎉 主题派对</span>
+  </div>
+
+  <!-- A -->
+  <div class="mod" data-mod="A">
+    <h2>🥗 A. 营养 & 菜单 <span class="n">5</span></h2>
+    <div class="grid">
+      <div class="tool"><div class="name">list-nutrition-foods <span class="tag-t ok">实测</span></div><div class="desc">160 项餐品营养基准：能量/蛋白/脂肪/碳水/钠/钙</div><div class="p">入参：<b>无</b></div><div class="ex">"查麦当劳所有餐品的营养和热量"</div></div>
+      <div class="tool"><div class="name">query-meals <span class="tag-t ok">实测</span></div><div class="desc">可售餐品菜单，支持到店/外送，团餐智能搭配</div><div class="p">入参：<b>storeCode, beCode, orderType, beType</b>(必)</div><div class="ex">"这家店能点到哪些餐品"</div></div>
+      <div class="tool"><div class="name">query-meal-detail</div><div class="desc">餐品组成、可替换/特制项</div><div class="p">入参：<b>code</b>(必)，orderType</div><div class="ex">"巨无霸里都有什么，能换吗"</div></div>
+      <div class="tool"><div class="name">query-nearby-stores</div><div class="desc">附近可点餐门店（到店自取 beType=1 / 得来速 beType=5）</div><div class="p">入参：<b>searchType, beType</b>(必)</div><div class="ex">"我附近有哪些麦当劳可以自取"</div></div>
+      <div class="tool"><div class="name">now-time-info</div><div class="desc">当前服务器时间（查活动日历前必用）</div><div class="p">入参：<b>无</b></div><div class="ex">"现在几点，本月有啥活动"</div></div>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="mod" data-mod="B">
+    <h2>🎟️ B. 优惠 & 领券 <span class="n">5</span></h2>
+    <div class="grid">
+      <div class="tool"><div class="name">available-coupons <span class="tag-t ok">实测</span></div><div class="desc">当前可领麦麦省券列表（实时，返回券名/图/状态/标签）</div><div class="p">入参：<b>无</b></div><div class="ex">"现在能领什么麦当劳优惠券"</div></div>
+      <div class="tool"><div class="name">auto-bind-coupons</div><div class="desc">一键领取全部可领券（需用户授权）</div><div class="p">入参：<b>无</b></div><div class="ex">"帮我一键领券"</div></div>
+      <div class="tool"><div class="name">query-my-coupons</div><div class="desc">我的卡包券资产（展示/管理，不校验当前订单可用性）</div><div class="p">入参：<b>无</b></div><div class="ex">"我卡包里有什么券"</div></div>
+      <div class="tool"><div class="name">query-store-coupons</div><div class="desc">指定门店+订单类型可用券（到店 orderType=1 / 外送 orderType=2）</div><div class="p">入参：<b>storeCode, beCode, orderType, beType</b>(必)</div><div class="ex">"这家店我有哪些券能用"</div></div>
+      <div class="tool"><div class="name">query-promotions <span class="tag-t real">新增</span></div><div class="desc">企业团餐场景满减/满折促销规则原始数据</div><div class="p">入参：门店上下文(beType=6)</div><div class="ex">"团餐现在有什么满减活动"</div></div>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="mod" data-mod="C">
+    <h2>💳 C. 计价 & 下单 & 订单 <span class="n">10</span></h2>
+    <div class="grid">
+      <div class="tool"><div class="name">calculate-price</div><div class="desc">含优惠计价（到店/外送）</div><div class="p">入参：<b>items[].productCode/quantity</b>(必)，门店上下文</div><div class="ex">"这些商品加起来多少钱"</div></div>
+      <div class="tool"><div class="name">create-order</div><div class="desc">创建订单（到店 orderType=1 / 外送 orderType=2）</div><div class="p">入参：<b>items</b>(必) + 地址/取餐码</div><div class="ex">"帮我下单巨无霸套餐"</div></div>
+      <div class="tool"><div class="name">cancel-order</div><div class="desc">取消订单（非商城）</div><div class="p">入参：<b>orderId, cancelReasonCode</b>(必)</div><div class="ex">"取消我刚才的订单"</div></div>
+      <div class="tool"><div class="name">query-order</div><div class="desc">订单详情 / 配送进度</div><div class="p">入参：<b>orderId</b>(必)</div><div class="ex">"查下订单状态/到哪了"</div></div>
+      <div class="tool"><div class="name">order-list</div><div class="desc">历史订单（非商城，最近 10 笔）</div><div class="p">入参：<b>无</b></div><div class="ex">"我最近买了什么麦当劳"</div></div>
+      <div class="tool"><div class="name">query-survey-coupon <span class="tag-t real">新增</span></div><div class="desc">订单 CSAT 满意度答卷 + 关联奖券核销状态</div><div class="p">入参：<b>orderId</b></div><div class="ex">"看看这个订单的奖券核销了没"</div></div>
+      <div class="tool"><div class="name">delivery-query-addresses</div><div class="desc">外送配送地址列表</div><div class="p">入参：<b>无</b></div><div class="ex">"我的配送地址有哪些"</div></div>
+      <div class="tool"><div class="name">delivery-create-address</div><div class="desc">新增配送地址</div><div class="p">入参：<b>city, contactName, phone, address, addressDetail</b>(必)</div><div class="ex">"加个新配送地址"</div></div>
+      <div class="tool"><div class="name">delivery-query-stores</div><div class="desc">按地址查可配送门店</div><div class="p">入参：<b>addressId, beType</b>(必)</div><div class="ex">"这个地址能送到哪些店"</div></div>
+      <div class="tool"><div class="name">query-meal-assistance</div><div class="desc">企业团餐助餐服务（calculate-price 前调用）</div><div class="p">入参：<b>storeCode, beCode, beType, orderType</b>(必)</div><div class="ex">"团餐有什么助餐服务"</div></div>
+    </div>
+  </div>
+
+  <!-- D -->
+  <div class="mod" data-mod="D">
+    <h2>🎡 D. 互动 / 积分 / 抽奖 <span class="n">5</span></h2>
+    <div class="grid">
+      <div class="tool"><div class="name">campaign-calendar</div><div class="desc">当月活动日历（进行中/往期/未来 + 订阅状态）</div><div class="p">入参：<b>specifiedDate</b>(选)</div><div class="ex">"这个月有什么优惠活动"</div></div>
+      <div class="tool"><div class="name">query-lottery-info</div><div class="desc">积分抽奖活动信息（不执行抽奖）</div><div class="p">入参：<b>无</b></div><div class="ex">"抽一次要多少积分，有啥奖品"</div></div>
+      <div class="tool"><div class="name">draw-lottery</div><div class="desc">积分抽奖（原子扣减，1 秒限 1 次）</div><div class="p">入参：<b>无</b></div><div class="ex">"用积分抽一次奖"</div></div>
+      <div class="tool"><div class="name">query-my-prizes</div><div class="desc">我的奖品（可用/已用/过期/已领取）</div><div class="p">入参：<b>pageNum, pageSize</b>(选)</div><div class="ex">"我抽中了什么"</div></div>
+      <div class="tool"><div class="name">query-my-account</div><div class="desc">积分账户详情（余额/过期积分）</div><div class="p">入参：<b>无</b></div><div class="ex">"我有多少积分"</div></div>
+    </div>
+  </div>
+
+  <!-- E -->
+  <div class="mod" data-mod="E">
+    <h2>🛍️ E. 麦麦商城（积分兑换） <span class="n">5</span></h2>
+    <div class="grid">
+      <div class="tool"><div class="name">mall-points-products</div><div class="desc">可兑换商品列表（券/实物/周边/派对，类目筛选）</div><div class="p">入参：<b>catRuleIds</b>(选)</div><div class="ex">"积分能兑换什么"</div></div>
+      <div class="tool"><div class="name">mall-product-detail</div><div class="desc">商品详情 SKU（需先选 SPU）</div><div class="p">入参：<b>spuId</b>(必)</div><div class="ex">"这个兑换商品详情是什么"</div></div>
+      <div class="tool"><div class="name">mall-create-order</div><div class="desc">积分兑换下单（shopId=2）</div><div class="p">入参：<b>skuId, spuCategory</b>(必)</div><div class="ex">"用积分兑换这个商品"</div></div>
+      <div class="tool"><div class="name">mall-order-list</div><div class="desc">商城订单列表</div><div class="p">入参：<b>lastId, size</b>(选)</div><div class="ex">"查看我的麦当劳商城订单"</div></div>
+      <div class="tool"><div class="name">mall-order-detail</div><div class="desc">商城订单详情</div><div class="p">入参：<b>orderId</b>(必)</div><div class="ex">"商城订单详情"</div></div>
+    </div>
+  </div>
+
+  <!-- F -->
+  <div class="mod" data-mod="F">
+    <h2>🎉 F. 主题活动 / 派对 <span class="n">5</span></h2>
+    <div class="grid">
+      <div class="tool"><div class="name">query-party-city</div><div class="desc">派对活动城市（先取 spuId）</div><div class="p">入参：<b>spuId</b>(必)</div><div class="ex">"主题派对在哪些城市"</div></div>
+      <div class="tool"><div class="name">query-party-store</div><div class="desc">指定城市派对门店列表</div><div class="p">入参：<b>spuId, code</b>(必)</div><div class="ex">"这家店能办生日派对吗"</div></div>
+      <div class="tool"><div class="name">query-party-store-date</div><div class="desc">门店可预约日期</div><div class="p">入参：<b>spuId, storeCode</b>(必)</div><div class="ex">"这家店哪天能预约"</div></div>
+      <div class="tool"><div class="name">query-party-store-session</div><div class="desc">指定日期场次列表</div><div class="p">入参：<b>spuId, storeCode, dateStr</b>(必)</div><div class="ex">"这天有哪些场次"</div></div>
+      <div class="tool"><div class="name">party-order-create</div><div class="desc">派对下单（包场 partyType=1 / 拼团，shopId=5）</div><div class="p">入参：多项必填</div><div class="ex">"预约一个生日派对"</div></div>
+    </div>
+  </div>
+
+  <footer>
+    数据来源：麦当劳官方 MCP <code>https://mcp.mcd.cn</code> 的 <code>tools/list</code>（2026-10-22 实测 35 个）<br>
+    接入文档 <a href="https://open.mcd.cn/mcp/doc" target="_blank">open.mcd.cn/mcp/doc</a> · 限流 600 次/分钟（401 失效 / 429 限流）· 单文件离线 HTML
+  </footer>
+</div>
+
+<script>
+  const q = document.getElementById('q');
+  const chips = document.getElementById('chips');
+  const mods = [...document.querySelectorAll('.mod')];
+  const tools = [...document.querySelectorAll('.tool')];
+  const cnt = document.getElementById('cnt');
+  let filt = 'all';
+  function apply(){
+    const kw = q.value.trim().toLowerCase();
+    let shown = 0;
+    tools.forEach(t=>{
+      const mod = t.closest('.mod').dataset.mod;
+      const txt = t.textContent.toLowerCase();
+      const okMod = (filt==='all'||filt===mod);
+      const okKw = (!kw || txt.includes(kw));
+      const vis = okMod && okKw;
+      t.classList.toggle('hidden', !vis);
+      if(vis) shown++;
+    });
+    mods.forEach(m=>{
+      const any = [...m.querySelectorAll('.tool')].some(x=>!x.classList.contains('hidden'));
+      m.classList.toggle('hidden', !any);
+    });
+    cnt.textContent = `共 ${shown} 个`;
+  }
+  q.addEventListener('input', apply);
+  chips.addEventListener('click', e=>{
+    const c = e.target.closest('.chip'); if(!c) return;
+    chips.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on'); filt = c.dataset.f; apply();
+  });
+</script>
+</body>
+</html>
