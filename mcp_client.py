@@ -21,6 +21,7 @@ import urllib.error
 import json
 import os
 import sys
+import re
 import datetime
 
 MCD_MCP_URL = "https://mcp.mcd.cn"
@@ -174,6 +175,86 @@ def fetch_meals(token=None, order_type=1):
     res = _call(token, "query-meals", {"orderType": order_type}, sid)
     obj = _extract_json(_text(res))
     return obj.get("data", {}) if obj else {}
+
+
+# ---------- 省钱闭环（领券 + 计价） ----------
+
+def _extract_block(text, must_have):
+    """从 MCP 混合文本里抠出同时含 must_have 全部键的 JSON 对象（用于 calculate-price）。"""
+    for mt in re.finditer(r'\{', text):
+        s = mt.start()
+        depth = 0
+        for i in range(s, len(text)):
+            c = text[i]
+            if c == '{':
+                depth += 1
+            elif c == '}':
+                depth -= 1
+                if depth == 0:
+                    try:
+                        o = json.loads(text[s:i + 1])
+                        if isinstance(o, dict) and all(k in o for k in must_have):
+                            return o
+                    except json.JSONDecodeError:
+                        pass
+                    break
+    return None
+
+
+def fetch_nearby_stores(city, keyword, be_type=1, token=None):
+    token = token or os.environ.get("MCD_MCP_TOKEN")
+    if not token:
+        raise RuntimeError("缺少 MCD_MCP_TOKEN")
+    sid = _session(token)
+    res = _call(token, "query-nearby-stores",
+                {"searchType": "2", "beType": be_type, "city": city, "keyword": keyword}, sid)
+    obj = _extract_json(_text(res))
+    if not obj or not obj.get("success"):
+        return []
+    return obj.get("data") or []
+
+
+def fetch_meals(store_code, be_code="", order_type=1, be_type=1, token=None):
+    token = token or os.environ.get("MCD_MCP_TOKEN")
+    sid = _session(token)
+    params = {"storeCode": store_code, "orderType": order_type, "beType": be_type}
+    if be_code:
+        params["beCode"] = be_code
+    res = _call(token, "query-meals", params, sid)
+    obj = _extract_json(_text(res))
+    return obj.get("data", {}) if obj else {}
+
+
+def fetch_store_coupons(store_code, be_code="", order_type=1, be_type=1, token=None):
+    token = token or os.environ.get("MCD_MCP_TOKEN")
+    sid = _session(token)
+    params = {"storeCode": store_code, "orderType": order_type, "beType": be_type}
+    if be_code:
+        params["beCode"] = be_code
+    res = _call(token, "query-store-coupons", params, sid)
+    obj = _extract_json(_text(res))
+    return obj.get("data") or [] if obj else []
+
+
+def fetch_calculate_price(items, store_code, be_code="", order_type=1, be_type=1, token=None):
+    """含优惠计价。注意 beType 必须传字符串（实测整数会 400）。返回 data 字典或 None。"""
+    token = token or os.environ.get("MCD_MCP_TOKEN")
+    if not token:
+        raise RuntimeError("缺少 MCD_MCP_TOKEN")
+    sid = _session(token)
+    params = {"items": items, "orderType": order_type, "storeCode": store_code, "beType": str(be_type)}
+    if be_code:
+        params["beCode"] = be_code
+    res = _call(token, "calculate-price", params, sid)
+    obj = _extract_block(_text(res), ("data",))
+    return obj.get("data") if obj else None
+
+
+def fetch_auto_bind_coupons(token=None):
+    token = token or os.environ.get("MCD_MCP_TOKEN")
+    sid = _session(token)
+    res = _call(token, "auto-bind-coupons", {}, sid)
+    return _text(res)
 
 
 def main():
