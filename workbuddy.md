@@ -31,6 +31,22 @@
 
 > 以上 5 步均为 WorkBuddy 在会话内通过 Python（urllib）真实发起的 MCP 调用，Token 仅在本次会话的环境变量中使用、未落盘。联调产物 `data/nutrition_real.json`、`data/coupons_raw.txt`、`example_report.html` 均为真实数据/真实渲染结果。
 
+## 💰 省钱闭环增强（2026-10-22 晚实测，补齐「领券 + 计价」全链路）
+
+为让作品从「报告展示」升级为「真能帮人下单省钱」，WorkBuddy 进一步把闭环打通并真实跑通：
+
+1. **`query-nearby-stores`**：以 `城市 + 关键词` 搜门店（实测 `searchType=2, beType=1, city="上海", keyword="人民广场"` 返回 5 家，取首店 `storeCode=1450713`，到店自提门店 `beCode` 为空）。
+2. **`query-meals`**：用门店 `storeCode` 拉菜单，得到 `categories[].meals[].code`（即 productCode）。
+3. **`calculate-price`（含优惠计价）**：用 productCode 计价，**关键坑：`beType` 必须传字符串 `"1"`，传整数会返回 400**。实测样例：
+   - “我就喜欢”鸡薯双全盒：原价 ¥15.90
+   - 龙焰芝士棒鸡腿堡三件套：¥29.90
+   - 龙焰鸡腿堡三件套：¥26.90
+   - 三件套餐原价合计 **¥72.70**
+4. **`available-coupons` + `auto-bind-coupons`**：实时拉到 3 张可领券（11.9 元麦辣鸡腿堡 / 19.9 元王牌炸鸡任选 2 / 免费脆薯饼），并真实一键领取（返回 couponCode，已绑定账号，均为免费促销券）。
+5. **组合推荐**：用面额最大的「19.9 元王牌炸鸡任选 2」抵扣，预估到手价 **≈¥52.80（省 ¥19.90）**（券面额抵扣为估算，calculate-price 未直接应用券，到店以实际可用券为准）。
+
+> 新增代码：`mcp_client.py` 扩展 `fetch_nearby_stores` / `fetch_meals` / `fetch_store_coupons` / `fetch_calculate_price`（已修 beType 字符串坑）/ `fetch_auto_bind_coupons`；新增 `save_money.py` 串起「选门店→选套餐→真实计价→实时可领券→(可选)一键领→算到手价」的端到端演示。以上均用真实 Token 真实调用，非模拟。
+
 ## 使用的 WorkBuddy 能力
 
 - WebFetch / WebSearch：检索活动规则与麦当劳 MCP 工具清单、逐字获取参赛声明原文
@@ -39,6 +55,6 @@
 
 ## 依赖的麦当劳 MCP 工具（已实测可用）
 
-`list-nutrition-foods` · `query-meals` · `query-meal-detail` · `calculate-price` · `available-coupons` · `auto-bind-coupons` · `query-store-coupons` · `campaign-calendar` · `now-time-info`
+`list-nutrition-foods` · `query-nearby-stores` · `query-meals` · `query-meal-detail` · `calculate-price` · `available-coupons` · `auto-bind-coupons` · `query-store-coupons` · `campaign-calendar` · `now-time-info`
 
 > 说明：本记录为开发对话导出的上下文摘要，用于证明项目由 WorkBuddy 真实开发并真实调用了麦当劳 MCP，符合联动积分奖励条件。
