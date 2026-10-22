@@ -42,12 +42,13 @@
 | Tool | 用途 | 实测 |
 |---|---|---|
 | `list-nutrition-foods` | 餐品营养基准（能量/蛋白/脂肪/碳水/钠/钙），无需入参，返回 160 项 | ✅ |
-| `query-meals` | 当前可售餐品菜单（编码/分类） | ✅ |
+| `query-nearby-stores` | 城市+关键词搜附近门店（返回 storeCode / beCode） | ✅ |
+| `query-meals` | 指定门店可售餐品菜单（含 `categories[].meals[].code` 即 productCode） | ✅ |
 | `query-meal-detail` | 餐品/套餐详情、可替换项（`code` 必填） | 计划 |
-| `calculate-price` | 含优惠券计价（`items` 必填，需门店上下文） | 计划 |
+| `calculate-price` | 含优惠计价（`items` 必填；**`beType` 必须传字符串，整数会 400**） | ✅ 真实价格 |
 | `available-coupons` | 麦麦省可领券列表，无需入参 | ✅ 实时 3 张 |
-| `auto-bind-coupons` | 一键领麦麦省券，无需入参（需用户授权） | 计划 |
-| `query-store-coupons` | 当前门店可用券（`storeCode`/`beCode`/`orderType`/`beType` 必填） | 计划 |
+| `auto-bind-coupons` | 一键领麦麦省券，无需入参（需用户授权，会真实绑定账号） | ✅ 实测领到 3 张 |
+| `query-store-coupons` | 当前门店可用券（`storeCode`/`beCode`/`orderType`/`beType` 必填） | ✅ |
 | `campaign-calendar` | 当月活动日历（`specifiedDate` 选填） | 计划 |
 | `now-time-info` | 当前时间，无需入参 | 计划 |
 
